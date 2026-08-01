@@ -1,14 +1,31 @@
 from smc import SMC
 
 
-class FanController:
-    """Placeholder controller for managing Apple fan behavior."""
+class Fan:
 
-    def __init__(self, smc: SMC):
-        self.smc = smc
+    def __init__(self, number):
+        self.number = number
+        self.smc = SMC()
 
-    def list_fans(self):
-        return []
+    @property
+    def label(self):
+        return self.smc.read(f"fan{self.number}_label")
 
-    def set_speed(self, fan_id: int, speed: int) -> None:
-        raise NotImplementedError("Fan control logic will be implemented here.")
+    @property
+    def rpm(self):
+        return int(self.smc.read(f"fan{self.number}_input"))
+
+    @property
+    def minimum(self):
+        return int(self.smc.read(f"fan{self.number}_min"))
+
+    @property
+    def maximum(self):
+        return int(self.smc.read(f"fan{self.number}_max"))
+
+    def __str__(self):
+        return (
+            f"{self.label}: "
+            f"{self.rpm} RPM "
+            f"(Min {self.minimum}, Max {self.maximum})"
+        )
