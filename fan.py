@@ -3,9 +3,12 @@ from smc import SMC
 
 class Fan:
 
-    def __init__(self, number):
+    def __init__(self, number, smc=None):
+        if not isinstance(number, int) or number < 1:
+            raise ValueError("Fan number must be a positive integer.")
+
         self.number = number
-        self.smc = SMC()
+        self.smc = smc or SMC()
 
     @property
     def label(self):

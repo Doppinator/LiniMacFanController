@@ -18,5 +18,5 @@ A small Python project for interacting with Apple SMC fan and sensor data on sup
    ```
 2. Run the application:
    ```bash
-   python main.py
+   python3 main.py
    ```

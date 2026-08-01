@@ -1,18 +1,19 @@
 from fan import Fan
+from smc import SMC
 
 
 def main():
 
-    fans = [
-        Fan(1),
-        Fan(2),
-        Fan(3)
-    ]
+    smc = SMC()
+    fans = [Fan(number, smc) for number in smc.fan_numbers()]
 
     print()
 
-    for fan in fans:
-        print(fan)
+    if fans:
+        for fan in fans:
+            print(fan)
+    else:
+        print("No fans were reported by the Apple SMC driver.")
 
     print()
 
