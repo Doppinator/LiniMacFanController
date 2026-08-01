@@ -2,7 +2,12 @@ class Controller:
 
     def __init__(self):
         self.curve = [
-            (40, 10000),
-            (60, 20000),
-            (80, 30000),
+            (40, 1000),
+            (60, 1500),
+            (80, 2100),
         ]
+    def get_rpm_for_temperature(self, temperature):
+        for temp, rpm in self.curve:
+            if temperature <= temp:
+                return rpm
+        return self.curve[-1][1]
