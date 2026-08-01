@@ -6,7 +6,7 @@ class Controller:
             (60, 1500),
             (80, 2100),
         ]
-    def get_rpm_for_temperature(self, temperature):
+    def get_step_rpm(self, temperature):
         for temp, rpm in self.curve:
             if temperature <= temp:
                 return rpm
