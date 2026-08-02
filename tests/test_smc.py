@@ -16,6 +16,7 @@ class SMCFixtureTestCase(unittest.TestCase):
         self._write("fan2_label", "HDD\n")
         self._write("fan2_min", "1100\n")
         self._write("fan2_max", "5500\n")
+        self._write("fan2_target", "1800\n")
         self._write("temp12_input", "44500\n")
         self._write("temp12_label", "TC0C\n")
         self.smc = SMC(self.base)
@@ -33,6 +34,11 @@ class SMCFixtureTestCase(unittest.TestCase):
     def test_fan_reads_values_from_shared_smc(self):
         fan = Fan(2, self.smc)
         self.assertEqual(str(fan), "HDD: 1500 RPM (Min 1100, Max 5500)")
+        self.assertEqual(fan.refresh, 1500)
+        self.assertEqual(fan.target_rpm, 1800)
+
+    def test_fan_target_is_optional(self):
+        self.assertIsNone(Fan(10, self.smc).target_rpm)
 
     def test_sensor_converts_millidegrees_and_uses_friendly_name(self):
         sensor = Sensor(12, self.smc)

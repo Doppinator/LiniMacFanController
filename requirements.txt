@@ -1,2 +1,1 @@
-# Add Python dependencies here.
-# No third-party packages are required for the initial scaffold.
+psutil>=7.0
