@@ -32,8 +32,8 @@ class Fan:
         return int(self.smc.read(f"fan{self.number}_speed"))
 
     @property
-    def set_rpm(self) -> int:
-        return int(self.smc.read(f"fan{self.number}_target"))
-
+    def set_rpm(self, rpm: int):
+        self.smc.write(f"fan{self.number}_target", str(rpm))
+    
     def __str__(self) -> str:
         return f"{self.label}: {self.rpm} RPM (Min {self.minimum}, Max {self.maximum})"
