@@ -1,9 +1,9 @@
 import time
 
-from LiniMacFanController.Controller import Controller
-from LiniMacFanController.Explorer.Fans import Fan
-from LiniMacFanController.Explorer.Sensors import Sensor
-from LiniMacFanController.SMC import SMC
+from LiniMacFanController.controller import Controller
+from LiniMacFanController.explorer.fans import Fan
+from LiniMacFanController.explorer.sensors import Sensor
+from LiniMacFanController.smc import SMC
 
 def main():
     smc = SMC()

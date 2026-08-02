@@ -1,4 +1,4 @@
-from ...SMC import SMC
+from ...smc import SMC
 
 
 class Sensor:

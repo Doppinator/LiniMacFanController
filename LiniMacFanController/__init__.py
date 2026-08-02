@@ -1,6 +1,6 @@
 """Linux iMac fan monitoring and control components."""
 
-from .Controller import Controller
-from .SMC import SMC
+from .controller import Controller
+from .smc import SMC
 
 __all__ = ["Controller", "SMC"]
