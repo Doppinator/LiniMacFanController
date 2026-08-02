@@ -1,5 +1,11 @@
-import platform
+class Explorer:
 
+    def __init__(self):
+        self.fans = []
+        self.sensors = []
 
-def hardware_explorer();
-    
+    def refresh(self):
+        ...
+
+    def __str__(self):
+        ...
