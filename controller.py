@@ -39,6 +39,6 @@ class Controller:
         slope = (upper_rpm - lower_rpm) / (upper_temp - lower_temp)
         interpolated_rpm = lower_rpm + slope * (temperature - lower_temp)
 
-        return int(interpolated_rpm)
+        return round(interpolated_rpm)
    
 
