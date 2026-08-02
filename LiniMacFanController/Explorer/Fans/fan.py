@@ -28,7 +28,7 @@ class Fan:
         return int(self.smc.read(f"fan{self.number}_max"))
 
     @property
-    def refresh_rate(self) -> int:
+    def refresh(self) -> int:
         return int(self.smc.read(f"fan{self.number}_speed"))
 
     @property

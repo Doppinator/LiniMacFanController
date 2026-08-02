@@ -1,0 +1,102 @@
+[33mcommit 9f19d889f5f65d402ed7ba17392cd316de9ee5ee[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: John Dopping <john.dh@hotmail.co.uk>
+Date:   Sun Aug 2 14:14:05 2026 +0100
+
+    Revised directory structure, added refresh_rate and set_rpm methods to Fan class
+
+[1mdiff --git a/LiniMacFanController/Controller/__init__.py b/LiniMacFanController/Controller/__init__.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e77d95f[m
+[1m--- /dev/null[m
+[1m+++ b/LiniMacFanController/Controller/__init__.py[m
+[36m@@ -0,0 +1,5 @@[m
+[32m+[m[32m"""Fan-speed control policies."""[m
+[32m+[m
+[32m+[m[32mfrom .controller import Controller[m
+[32m+[m
+[32m+[m[32m__all__ = ["Controller"][m
+[1mdiff --git a/controller.py b/LiniMacFanController/Controller/controller.py[m
+[1msimilarity index 85%[m
+[1mrename from controller.py[m
+[1mrename to LiniMacFanController/Controller/controller.py[m
+[1mindex b03c689..3d1d7ef 100644[m
+[1m--- a/controller.py[m
+[1m+++ b/LiniMacFanController/Controller/controller.py[m
+[36m@@ -1,4 +1,5 @@[m
+ class Controller:[m
+[32m+[m[32m    """Maps a temperature to a desired fan speed using a configurable curve."""[m
+ [m
+     def __init__(self):[m
+         self.curve = [[m
+[36m@@ -6,6 +7,7 @@[m [mclass Controller:[m
+             (60, 1500),[m
+             (80, 2100),[m
+         ][m
+[32m+[m
+     def get_step_rpm(self, temperature):[m
+         for temp, rpm in self.curve:[m
+             if temperature <= temp:[m
+[36m@@ -34,11 +36,5 @@[m [mclass Controller:[m
+ [m
+         lower_temp, lower_rpm = lower[m
+         upper_temp, upper_rpm = upper[m
+[31m-[m
+[31m-        # Linear interpolation formula[m
+         slope = (upper_rpm - lower_rpm) / (upper_temp - lower_temp)[m
+[31m-        interpolated_rpm = lower_rpm + slope * (temperature - lower_temp)[m
+[31m-[m
+[31m-        return round(interpolated_rpm)[m
+[31m-   [m
+[31m-[m
+[32m+[m[32m        return round(lower_rpm + slope * (temperature - lower_temp))[m
+[1mdiff --git a/LiniMacFanController/Explorer/Fans/__init__.py b/LiniMacFanController/Explorer/Fans/__init__.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..8c4096e[m
+[1m--- /dev/null[m
+[1m+++ b/LiniMacFanController/Explorer/Fans/__init__.py[m
+[36m@@ -0,0 +1,5 @@[m
+[32m+[m[32m"""Fan exploration primitives."""[m
+[32m+[m
+[32m+[m[32mfrom .fan import Fan[m
+[32m+[m
+[32m+[m[32m__all__ = ["Fan"][m
+[1mdiff --git a/LiniMacFanController/Explorer/Fans/fan.py b/LiniMacFanController/Explorer/Fans/fan.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..667280c[m
+[1m--- /dev/null[m
+[1m+++ b/LiniMacFanController/Explorer/Fans/fan.py[m
+[36m@@ -0,0 +1,39 @@[m
+[32m+[m[32mfrom ...SMC import SMC[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Fan:[m
+[32m+[m[32m    """A fan exposed by the Apple SMC hwmon interface."""[m
+[32m+[m
+[32m+[m[32m    def __init__(self, number: int, smc: SMC | None = None):[m
+[32m+[m[32m        if not isinstance(number, int) or number < 1:[m
+[32m+[m[32m            raise ValueError("Fan number must be a positive integer.")[m
+[32m+[m
+[32m+[m[32m        self.number = number[m
+[32m+[m[32m        self.smc = smc or SMC()[m
+[32m+[m
+[32m+[m[32m    @property[m
+[32m+[m[32m    def label(self) -> str:[m
+[32m+[m[32m        return self.smc.read(f"fan{self.number}_label")[m
+[32m+[m
+[32m+[m[32m    @property[m
+[32m+[m[32m    def rpm(self) -> int:[m
+[32m+[m[32m        return int(self.smc.read(f"fan{self.number}_input"))[m
+[32m+[m
+[32m+[m[32m    @property[m
+[32m+[m[32m    def minimum(self) -> int:[m
+[32m+[m[32m        return int(self.smc.read(f"fan{self.number}_min"))[m
+[32m+[m
+[32m+[m[32m    @property[m
+[32m+[m[32m    def maximum(self) -> int:[m
+[32m+[m[32m        return int(self.smc.read(f"fan{self.number}_max"))[m
+[32m+[m
+[32m+[m[32m    @property[m
+[32m+[m[32m    def refresh_rate(self) -> int:[m
+[32m+[m[32m        return int(self.smc.read(f"fan{self.number}_speed"))[m
+[32m+[m
+[32m+
