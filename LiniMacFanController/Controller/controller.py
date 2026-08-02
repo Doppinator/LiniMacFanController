@@ -1,4 +1,5 @@
 class Controller:
+    """Maps a temperature to a desired fan speed using a configurable curve."""
 
     def __init__(self):
         self.curve = [
@@ -6,6 +7,7 @@ class Controller:
             (60, 1500),
             (80, 2100),
         ]
+
     def get_step_rpm(self, temperature):
         for temp, rpm in self.curve:
             if temperature <= temp:
@@ -34,11 +36,5 @@ class Controller:
 
         lower_temp, lower_rpm = lower
         upper_temp, upper_rpm = upper
-
-        # Linear interpolation formula
         slope = (upper_rpm - lower_rpm) / (upper_temp - lower_temp)
-        interpolated_rpm = lower_rpm + slope * (temperature - lower_temp)
-
-        return round(interpolated_rpm)
-   
-
+        return round(lower_rpm + slope * (temperature - lower_temp))

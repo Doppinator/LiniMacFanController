@@ -6,11 +6,7 @@ class SMC:
     """Low-level interface to the Apple SMC sysfs files."""
 
     def __init__(self, base_path=None):
-        """Create an SMC interface.
-
-        ``base_path`` is primarily useful for tests, but also allows callers to
-        target a known sysfs device when more than one is present.
-        """
+        """Create an SMC interface, optionally rooted at a test/device path."""
         self.base = Path(base_path) if base_path is not None else self._find_base_path()
 
         if not self.base.is_dir():
@@ -26,9 +22,7 @@ class SMC:
 
     def read(self, filename):
         """Read a value from an SMC file."""
-        path = self.base / filename
-
-        return path.read_text().strip()
+        return (self.base / filename).read_text().strip()
 
     def exists(self, filename):
         return (self.base / filename).exists()
@@ -43,9 +37,8 @@ class SMC:
 
     def _numbers_for(self, prefix, suffix):
         pattern = re.compile(rf"{re.escape(prefix)}(\d+)_{re.escape(suffix)}")
-        numbers = (
+        return sorted(
             int(match.group(1))
             for path in self.base.iterdir()
             if (match := pattern.fullmatch(path.name))
         )
-        return sorted(numbers)

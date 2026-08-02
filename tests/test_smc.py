@@ -2,9 +2,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from fan import Fan
-from sensor import Sensor
-from smc import SMC
+from LiniMacFanController.Explorer.Fans import Fan
+from LiniMacFanController.Explorer.Sensors import Sensor
+from LiniMacFanController.SMC import SMC
 
 
 class SMCFixtureTestCase(unittest.TestCase):

@@ -1,14 +1,14 @@
-# iMacFanController
+# LiniMacFanController
 
 A small Python project for interacting with Apple SMC fan and sensor data on supported Macs.
 
 ## Project structure
 
-- `main.py` – entry point for the application
-- `smc.py` – Apple SMC discovery and low-level file access helpers
-- `fan.py` – fan control logic
-- `sensor.py` – sensor reading logic
-- `requirements.txt` – Python dependencies
+- `LiniMacFanController/Explorer/Sensors/` – temperature-sensor models
+- `LiniMacFanController/Explorer/Fans/` – fan models
+- `LiniMacFanController/Controller/` – fan-speed control policy
+- `LiniMacFanController/SMC/` – Apple SMC discovery and low-level access
+- `main.py` – application entry point
 
 ## Getting started
 
