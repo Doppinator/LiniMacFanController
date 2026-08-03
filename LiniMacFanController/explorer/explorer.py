@@ -1,3 +1,9 @@
+
+
+from ..smc import SMC
+from .fans import Fan
+from .sensors import Sensor
+
 class HardwareExplorer:
 
     def __init__(self):
@@ -11,5 +17,9 @@ class HardwareExplorer:
         ...
 
     def discover(self):
+        for fan_number in self.smc.fan_numbers():
+            self.fans.append(Fan(fan_number, self.smc))
+        for sensor_number in self.smc.sensor_numbers():
+            self.sensors.append(Sensor(sensor_number, self.smc))
         self.refresh()
         return self

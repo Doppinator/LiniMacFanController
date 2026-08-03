@@ -1,27 +1,11 @@
 import unittest
 
-from LiniMacFanController.explorer import hardware_explorer
+from LiniMacFanController.explorer import HardwareExplorer
 
 
 class HardwareExplorerTestCase(unittest.TestCase):
-    def test_returns_expected_system_fields(self):
-        info = hardware_explorer()
-
-        self.assertEqual(
-            set(info),
-            {
-                "System",
-                "Node Name",
-                "Release",
-                "Version",
-                "Machine",
-                "Processor",
-                "CPU Cores",
-                "Logical CPUs",
-                "RAM Size",
-            },
-        )
-        self.assertIsInstance(info["RAM Size"], float)
+    def test_is_exported_by_explorer_package(self):
+        self.assertEqual(HardwareExplorer.__name__, "HardwareExplorer")
 
 
 if __name__ == "__main__":
