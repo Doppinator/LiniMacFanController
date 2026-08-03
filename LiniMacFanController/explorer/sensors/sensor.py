@@ -17,6 +17,10 @@ class Sensor:
         self.number = number
         self.smc = smc or SMC()
 
+    def is_valid(self) -> bool:
+        """Return True if the sensor is valid (exists in sysfs)."""
+        return self.smc.exists(f"temp{self.number}_input")
+    
     @property
     def key(self) -> str:
         return self.smc.read(f"temp{self.number}_label")

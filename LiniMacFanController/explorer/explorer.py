@@ -21,6 +21,8 @@ class HardwareExplorer:
             self.fans.append(Fan(fan_number, self.smc))
         for sensor_number in self.smc.sensor_numbers():
             self.sensors.append(Sensor(sensor_number, self.smc))
+            if not self.sensors[-1].is_valid():
+                self.sensors.pop()
         self.refresh()
         return self
 
