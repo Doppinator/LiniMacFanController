@@ -23,3 +23,8 @@ class HardwareExplorer:
             self.sensors.append(Sensor(sensor_number, self.smc))
         self.refresh()
         return self
+
+    def __str__(self) -> str:
+        fan_str = "\n".join(str(fan) for fan in self.fans)
+        sensor_str = "\n".join(str(sensor) for sensor in self.sensors)
+        return f"Fans:\n{fan_str}\n\nSensors:\n{sensor_str}"
