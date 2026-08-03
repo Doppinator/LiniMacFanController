@@ -4,6 +4,7 @@ from LiniMacFanController import explorer
 from LiniMacFanController.controller import Controller
 from LiniMacFanController.explorer.fans import Fan
 from LiniMacFanController.explorer.sensors import Sensor
+from LiniMacFanController.explorer import HardwareExplorer
 from LiniMacFanController.smc import SMC
 
 def main():
@@ -11,7 +12,7 @@ def main():
     fans = [Fan(number, smc) for number in smc.fan_numbers()]
     controller = Controller()
     sensors = [Sensor(number, smc) for number in smc.sensor_numbers()]
-
+    explorer = HardwareExplorer()
     while True:
         explorer.discover()
         explorer.refresh()
