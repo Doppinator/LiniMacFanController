@@ -17,7 +17,7 @@ class Sensor:
         self.number = number
         self.smc = smc or SMC()
     
-    def is_valid(self):
+    def is_valid(self) -> bool:
         return self.celsius not in (-127.0, -7.0, 0.0)
 
     @property
