@@ -1,5 +1,9 @@
 
 
+from LiniMacFanController.explorer.sensors import sensor
+
+from LiniMacFanController.explorer.sensors import sensor
+
 from ..smc import SMC
 from .fans import Fan
 from .sensors import Sensor
@@ -20,9 +24,9 @@ class HardwareExplorer:
         for fan_number in self.smc.fan_numbers():
             self.fans.append(Fan(fan_number, self.smc))
         for sensor_number in self.smc.sensor_numbers():
-            self.sensors.append(Sensor(sensor_number, self.smc))
-            if not self.sensors[-1].is_valid():
-                self.sensors.pop()
+            sensor = Sensor(sensor_number, self.smc)
+            if sensor.is_valid():
+                self.sensors.append(sensor)
         self.refresh()
         return self
 
