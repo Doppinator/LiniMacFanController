@@ -14,6 +14,9 @@ class Sensor:
         self.smc = smc or SMC()
         self._celsius: float | None = None
         self._delta = 0.0
+        self._previous_celsius: float | None = None
+        self._current_celsius: float | None = None
+        
     @property
     def is_valid(self) -> bool:
         return self.celsius not in (-127.0, -7.0, 0.0)
@@ -31,21 +34,20 @@ class Sensor:
         """Temperature in degrees Celsius (sysfs stores millidegrees)."""
         return int(self.smc.read(f"temp{self.number}_input")) / 1000
 
-    def refresh(self) -> float:
-        current = self._read_celsius()
-        self._delta = 0.0 if self._celsius is None else current - self._celsius
-        self._celsius = current
-        return self._delta
+    def _read_celsius(self):
+        """Read the current temperature in degrees Celsius."""
+        return self.celsius
+        
+    def refresh(self):
+        self._previous_celsius = self._current_celsius
+        self._current_celsius = self._read_celsius()
+
 
     @property
-    def celsius(self) -> float:
-        if self._celsius is None:
-            self.refresh()
-        return self._celsius
-
-    @property
-    def delta(self) -> float:
-        return self._delta
+    def delta(self):
+        if self._previous_celsius is None or self._current_celsius is None:
+            return 0.0
+        return self._current_celsius - self._previous_celsius
 
     def __str__(self) -> str:
         return f"{self.name}: {self.celsius:.1f}°C"

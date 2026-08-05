@@ -1,6 +1,3 @@
-
-from LiniMacFanController.explorer.sensors import sensor
-
 from ..smc import SMC
 from .fans import Fan
 from .sensors import Sensor
