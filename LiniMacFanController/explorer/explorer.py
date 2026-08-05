@@ -2,35 +2,58 @@ from ..smc import SMC
 from .fans import Fan
 from .sensors import Sensor
 
+
 class HardwareExplorer:
 
     def __init__(self):
         self.smc = SMC()
+
         self.fans = []
         self.sensors = []
 
+    def discover(self):
+        self.fans.clear()
+        self.sensors.clear()
+
+        for number in self.smc.fan_numbers():
+            self.fans.append(Fan(number, self.smc))
+
+        for number in self.smc.sensor_numbers():
+            sensor = Sensor(number, self.smc)
+            sensor.refresh()
+            if sensor.is_valid:
+                self.sensors.append(sensor)
+
+        return self
+
     def refresh(self):
+
         for sensor in self.sensors:
-            delta = sensor.refresh()
-            if delta > 0:
+            sensor.refresh()
+
+    def __str__(self):
+
+        output = ["Fans:"]
+
+        for fan in self.fans:
+            output.append(str(fan))
+
+        output.append("")
+        output.append("Sensors:")
+
+        for sensor in self.sensors:
+
+            if sensor.delta > 0:
                 arrow = "▲"
-            elif delta < 0:
+            elif sensor.delta < 0:
                 arrow = "▼"
             else:
                 arrow = "→"
-            print(f"{arrow} {sensor}")
 
-    def discover(self):
-        for fan_number in self.smc.fan_numbers():
-            self.fans.append(Fan(fan_number, self.smc))
-        for sensor_number in self.smc.sensor_numbers():
-            sensor = Sensor(sensor_number, self.smc)
-            if sensor.is_valid:
-                self.sensors.append(sensor)
-        self.refresh()
-        return self
+            output.append(
+                f"{arrow} {sensor.name}: "
+                f"{sensor.celsius:.1f}°C "
+                f"({sensor.delta:+.1f}°C)"
+            )
 
-    def __str__(self) -> str:
-        fan_str = "\n".join(str(fan) for fan in self.fans)
-        sensor_str = "\n".join(str(sensor) for sensor in self.sensors)
-        return f"Fans:\n{fan_str}\n\nSensors:\n{sensor_str}"
+        return "\n".join(output)

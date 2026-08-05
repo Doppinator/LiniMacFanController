@@ -1,4 +1,4 @@
-from ..smc import SMC
+from ...smc import SMC
 from .sensor_registry import KNOWN_SENSORS
 
 
@@ -20,7 +20,7 @@ class Sensor:
         return int(self.smc.read(f"temp{self.number}_input")) / 1000
 
     def refresh(self) -> None:
-        """Update the cached temperature reading."""
+        """Refresh the cached temperature reading."""
         self._previous_celsius = self._current_celsius
         self._current_celsius = self._read_celsius()
 
@@ -36,11 +36,12 @@ class Sensor:
     def celsius(self) -> float:
         if self._current_celsius is None:
             self.refresh()
+
         return self._current_celsius
 
     @property
     def delta(self) -> float:
-        if self._previous_celsius is None or self._current_celsius is None:
+        if self._previous_celsius is None:
             return 0.0
 
         return self._current_celsius - self._previous_celsius
