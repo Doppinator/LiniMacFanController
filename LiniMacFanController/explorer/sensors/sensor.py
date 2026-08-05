@@ -1,14 +1,11 @@
 from ...smc import SMC
+from .sensor_registry import KNOWN_SENSORS
 
 
 class Sensor:
     """A temperature sensor exposed by the Apple SMC hwmon interface."""
 
-    sensor_names = {
-        "TC0C": "CPU Core",
-        "TG0D": "GPU Diode",
-        "TPCD": "Power Supply",
-    }
+    name = KNOWN_SENSORS.get("self.key, self.key")
 
     def __init__(self, number: int, smc: SMC | None = None):
         if not isinstance(number, int) or number < 1:
@@ -26,7 +23,7 @@ class Sensor:
 
     @property
     def name(self) -> str:
-        return self.sensor_names.get(self.key, self.key)
+        return KNOWN_SENSORS.get(self.key, self.key)
 
     @property
     def celsius(self) -> float:
