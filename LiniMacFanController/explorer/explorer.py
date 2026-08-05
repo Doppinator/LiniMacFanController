@@ -1,4 +1,6 @@
 
+from LiniMacFanController.explorer.sensors import sensor
+
 from ..smc import SMC
 from .fans import Fan
 from .sensors import Sensor
@@ -9,18 +11,24 @@ class HardwareExplorer:
         self.smc = SMC()
         self.fans = []
         self.sensors = []
-    def refresh(self):
-        ...
 
-    def __str__(self):
-        ...
+    def refresh(self):
+        for sensor in self.sensors:
+            delta = sensor.refresh()
+            if delta > 0:
+                arrow = "▲"
+            elif delta < 0:
+                arrow = "▼"
+            else:
+                arrow = "→"
+            print(f"{arrow} {sensor}")
 
     def discover(self):
         for fan_number in self.smc.fan_numbers():
             self.fans.append(Fan(fan_number, self.smc))
         for sensor_number in self.smc.sensor_numbers():
             sensor = Sensor(sensor_number, self.smc)
-            if sensor.is_valid():
+            if sensor.is_valid:
                 self.sensors.append(sensor)
         self.refresh()
         return self

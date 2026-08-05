@@ -5,7 +5,6 @@ from .sensor_registry import KNOWN_SENSORS
 class Sensor:
     """A temperature sensor exposed by the Apple SMC hwmon interface."""
 
-    name = KNOWN_SENSORS.get("self.key, self.key")
 
     def __init__(self, number: int, smc: SMC | None = None):
         if not isinstance(number, int) or number < 1:
@@ -13,7 +12,9 @@ class Sensor:
 
         self.number = number
         self.smc = smc or SMC()
-    
+        self._celsius: float | None = None
+        self._delta = 0.0
+    @property
     def is_valid(self) -> bool:
         return self.celsius not in (-127.0, -7.0, 0.0)
 
@@ -29,6 +30,22 @@ class Sensor:
     def celsius(self) -> float:
         """Temperature in degrees Celsius (sysfs stores millidegrees)."""
         return int(self.smc.read(f"temp{self.number}_input")) / 1000
+
+    def refresh(self) -> float:
+        current = self._read_celsius()
+        self._delta = 0.0 if self._celsius is None else current - self._celsius
+        self._celsius = current
+        return self._delta
+
+    @property
+    def celsius(self) -> float:
+        if self._celsius is None:
+            self.refresh()
+        return self._celsius
+
+    @property
+    def delta(self) -> float:
+        return self._delta
 
     def __str__(self) -> str:
         return f"{self.name}: {self.celsius:.1f}°C"
