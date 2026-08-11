@@ -44,7 +44,9 @@ class HardwareExplorer:
         for sensor in self.sensors:
 
             output.append(
-                f"{sensor.name:<20}{sensor.celsius:>6.1f}°C"
+                f"{sensor.name:<20}"
+                f"{sensor.celsius:>8.1f}°C"
+                f"{sensor.delta:+8.1f}°C"
             )
 
         return "\n".join(output)
