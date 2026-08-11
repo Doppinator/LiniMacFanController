@@ -43,17 +43,8 @@ class HardwareExplorer:
 
         for sensor in self.sensors:
 
-            if sensor.delta > 0:
-                arrow = "▲"
-            elif sensor.delta < 0:
-                arrow = "▼"
-            else:
-                arrow = "→"
-
             output.append(
-                f"{arrow} {sensor.name}: "
-                f"{sensor.celsius:.1f}°C "
-                f"({sensor.delta:+.1f}°C)"
+                f"{sensor.name:<20}{sensor.celsius:>6.1f}°C"
             )
 
         return "\n".join(output)
