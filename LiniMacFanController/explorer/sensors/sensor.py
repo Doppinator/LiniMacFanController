@@ -14,6 +14,7 @@ class Sensor:
 
         self._previous_celsius: float | None = None
         self._current_celsius: float | None = None
+        
 
     def _read_celsius(self) -> float:
         """Read the current temperature from the hardware."""
@@ -23,6 +24,7 @@ class Sensor:
         """Refresh the cached temperature reading."""
         self._previous_celsius = self._current_celsius
         self._current_celsius = self._read_celsius()
+        self._baseline_celsius = self._current_celsius
 
     @property
     def key(self) -> str:
@@ -45,6 +47,13 @@ class Sensor:
             return 0.0
 
         return self._current_celsius - self._previous_celsius
+
+    @property
+    def change_from_baseline(self):
+        return self._current_celsius - self._baseline_celsius
+
+    def reset_baseline(self):
+        self._baseline_celsius = self._current_celsius
 
     def format_delta(delta: float) -> str:
         if abs(delta) < 0.05:
