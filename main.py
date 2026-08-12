@@ -9,7 +9,7 @@ def main():
 
     explorer.discover()
 
-    explorer.monitor(interval=1.0)
+    explorer.monitor(interval=10.0)
 
 if __name__ == "__main__":
     main()

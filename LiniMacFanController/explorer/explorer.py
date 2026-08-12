@@ -45,6 +45,13 @@ class HardwareExplorer:
         for sensor in self.sensors:
             sensor.refresh()
 
+    def get_sorted_sensors(self):
+        return sorted(
+            self.sensors,
+            key=lambda s: abs(s.delta),
+            reverse=True,
+        )
+
     def __str__(self):
 
         output = ["Fans:"]
@@ -59,12 +66,20 @@ class HardwareExplorer:
         output.append("")
         output.append("Sensors:")
 
-        for sensor in self.sensors:
-
+        for sensor in self.get_sorted_sensors():
             output.append(
                 f"{sensor.name:<20}"
                 f"{sensor.celsius:>8.1f}°C"
                 f"{sensor.delta:+8.1f}°C"
             )
-
         return "\n".join(output)
+
+    # for sensor in self.sensors:
+
+    #         output.append(
+    #             f"{sensor.name:<20}"
+    #             f"{sensor.celsius:>8.1f}°C"
+    #             f"{sensor.delta:+8.1f}°C"
+    #         )
+
+    #     return "\n".join(output)
