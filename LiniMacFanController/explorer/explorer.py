@@ -1,7 +1,13 @@
+
+
 from ..smc import SMC
 from .fans import Fan
 from .sensors import Sensor
+import os
+import time
 
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 class HardwareExplorer:
 
@@ -25,6 +31,14 @@ class HardwareExplorer:
                 self.sensors.append(sensor)
 
         return self
+
+    def monitor(self, interval: float = 1.0):
+        """Monitor the fans and sensors, printing their status to the console."""
+        while True:
+            self.refresh()
+            clear_terminal()
+            print(self)
+            time.sleep(interval)
 
     def refresh(self):
 
