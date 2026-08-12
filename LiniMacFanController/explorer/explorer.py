@@ -36,7 +36,11 @@ class HardwareExplorer:
         output = ["Fans:"]
 
         for fan in self.fans:
-            output.append(str(fan))
+            output.append(
+                f"{fan.label:<20}"
+                f"{fan.rpm:>8} RPM"
+                f"{fan.minimum:>8} Min"
+                f"{fan.maximum:>8} Max")
 
         output.append("")
         output.append("Sensors:")

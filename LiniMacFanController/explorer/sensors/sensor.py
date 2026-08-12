@@ -46,6 +46,11 @@ class Sensor:
 
         return self._current_celsius - self._previous_celsius
 
+    def format_delta(delta: float) -> str:
+        if abs(delta) < 0.05:
+            return "   0.0°C"
+        return f"{delta:+7.1f}°C"
+
     @property
     def is_valid(self) -> bool:
         return self.celsius not in (-127.0, -7.0, 0.0)
