@@ -1,5 +1,5 @@
 from ...smc import SMC
-from .sensor_registry import KNOWN_SENSORS
+from .sensor_registry import SensorClassification, definition_for
 
 
 class Sensor:
@@ -32,7 +32,16 @@ class Sensor:
 
     @property
     def name(self) -> str:
-        return KNOWN_SENSORS.get(self.key, self.key)
+        return self.definition.name
+
+    @property
+    def definition(self):
+        """The display classification assigned to this SMC key."""
+        return definition_for(self.key)
+
+    @property
+    def is_displayable(self) -> bool:
+        return self.definition.classification is not SensorClassification.HIDDEN
 
     @property
     def celsius(self) -> float:

@@ -20,3 +20,13 @@ A small Python project for interacting with Apple SMC fan and sensor data on sup
    ```bash
    python3 main.py
    ```
+
+## Sensor display
+
+The monitor displays a concise set of canonical thermal readings: ambient,
+CPU core and heatsink, GPU diode, and power supply.  SMC aliases are used only
+when their canonical key is unavailable; unknown, model-specific keys are kept
+in the explorer's sensor collection but hidden from the normal console view.
+
+To support another Mac model, add its key and classification to
+`explorer/sensors/sensor_registry.py`.

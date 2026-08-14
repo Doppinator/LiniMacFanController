@@ -3,6 +3,7 @@
 from ..smc import SMC
 from .fans import Fan
 from .sensors import Sensor
+from .sensors.sensor_registry import select_display_sensors
 import os
 import time
 
@@ -47,7 +48,7 @@ class HardwareExplorer:
 
     def get_sorted_sensors(self):
         return sorted(
-            self.sensors,
+            select_display_sensors(self.sensors),
             key=lambda s: abs(s.delta),
             reverse=True,
         )
@@ -75,5 +76,4 @@ class HardwareExplorer:
                 f"{sensor.change_from_baseline:+8.1f}°C"
             )
         return "\n".join(output)
-
 

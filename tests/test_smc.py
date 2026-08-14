@@ -5,6 +5,11 @@ from pathlib import Path
 from LiniMacFanController.explorer.fans import Fan
 from LiniMacFanController.explorer.sensors import Sensor
 from LiniMacFanController.smc import SMC
+from LiniMacFanController.explorer.sensors.sensor_registry import (
+    SensorClassification,
+    definition_for,
+    select_display_sensors,
+)
 
 
 class SMCFixtureTestCase(unittest.TestCase):
@@ -51,6 +56,25 @@ class SMCFixtureTestCase(unittest.TestCase):
             Fan(0, self.smc)
         with self.assertRaises(ValueError):
             Sensor(0, self.smc)
+
+    def test_classifies_known_sensors_and_hides_opaque_keys(self):
+        self.assertEqual(definition_for("TC0C").name, "CPU Core")
+        self.assertEqual(
+            definition_for("TC1C").classification, SensorClassification.ALIAS
+        )
+        self.assertEqual(
+            definition_for("TL0P").classification, SensorClassification.HIDDEN
+        )
+
+    def test_prefers_primary_sensor_and_uses_alias_as_a_fallback(self):
+        class Reading:
+            def __init__(self, key):
+                self.key = key
+
+        readings = [Reading("TC1C"), Reading("TC0C"), Reading("TG0H"), Reading("TL0P")]
+        selected = select_display_sensors(readings)
+
+        self.assertEqual([reading.key for reading in selected], ["TC0C", "TG0H"])
 
 
 if __name__ == "__main__":
